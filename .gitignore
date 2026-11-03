@@ -3,7 +3,6 @@
 *.tfstate.*
 *.tfplan
 tfplan*
-*.tfvars
 crash.log
 crash.*.log
 __pycache__/

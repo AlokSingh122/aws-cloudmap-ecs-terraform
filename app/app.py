@@ -12,7 +12,8 @@ AWS_REGION = os.getenv("AWS_REGION", "unknown")
 PROJECT_SKILLS = [
     "Amazon ECR",
     "Amazon ECS",
-    "EC2 Spot capacity",
+    "Fargate Spot",
+    "ARM64",
     "API Gateway HTTP API",
     "AWS Cloud Map",
     "Terraform",
@@ -25,7 +26,7 @@ PROJECT_ARCHITECTURE = [
     },
     {
         "title": "Amazon ECS",
-        "detail": "Runs the container on EC2 Spot capacity in a private subnet.",
+        "detail": "Runs the ARM64 container on Fargate Spot in public subnets with inbound access restricted to the VPC Link.",
     },
     {
         "title": "Cloud Map + API Gateway",
@@ -44,7 +45,7 @@ def project_summary():
         "aws_architecture": [
             "Terraform defines the VPC, security groups, IAM roles, ECR, ECS, and Cloud Map resources.",
             "Amazon ECR stores the application image.",
-            "Amazon ECS capacity-provider managed scaling runs tasks on EC2 Spot capacity.",
+            "Amazon ECS runs the ARM64 task on Fargate Spot.",
             "API Gateway HTTP API routes requests to the ECS service through Cloud Map.",
         ],
     }

@@ -14,10 +14,21 @@ if ($LASTEXITCODE -ne 0) {
   throw "Could not read the configured image tag. Apply Terraform first."
 }
 
+$CpuArchitecture = (& terraform "-chdir=$TerraformDir" output -raw cpu_architecture).Trim()
+if ($LASTEXITCODE -ne 0) {
+  throw "Could not read the configured CPU architecture. Apply Terraform first."
+}
+
+$Platform = switch ($CpuArchitecture) {
+  "ARM64" { "linux/arm64" }
+  "X86_64" { "linux/amd64" }
+  default { throw "Unsupported CPU architecture '$CpuArchitecture'." }
+}
+
 $Image = "${RepositoryUrl}:$ImageTag"
-docker buildx build --platform linux/amd64 --load --tag $Image --file $Dockerfile $ProjectRoot
+docker buildx build --platform $Platform --load --tag $Image --file $Dockerfile $ProjectRoot
 if ($LASTEXITCODE -ne 0) {
   throw "Docker image build failed."
 }
 
-Write-Output "Built $Image for linux/amd64."
+Write-Output "Built $Image for $Platform."

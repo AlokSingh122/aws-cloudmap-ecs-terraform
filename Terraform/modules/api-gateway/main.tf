@@ -48,8 +48,8 @@ resource "aws_apigatewayv2_route" "proxy" {
 resource "aws_apigatewayv2_stage" "default" {
   api_id = aws_apigatewayv2_api.main.id
 
-  name        = "$default"
-  auto_deploy = true
+  name        = var.stage_name
+  auto_deploy = var.auto_deploy
 
   tags = {
     Name = "${var.project_name}-default-stage"

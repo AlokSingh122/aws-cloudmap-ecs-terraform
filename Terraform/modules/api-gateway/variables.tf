@@ -10,3 +10,11 @@ variable "vpc_link_id" {
 variable "cloudmap_service_arn" {
   type = string
 }
+
+variable "stage_name" {
+  type = string
+}
+
+variable "auto_deploy" {
+  type = bool
+}

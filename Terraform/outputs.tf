@@ -3,8 +3,8 @@ output "vpc_id" {
   value = module.networking.vpc_id
 }
 
-output "private_subnet_ids" {
-  value = module.networking.private_subnet_ids
+output "public_subnet_ids" {
+  value = module.networking.public_subnet_ids
 }
 
 output "ecr_repository_url" {
@@ -20,7 +20,7 @@ output "ecs_service_name" {
 }
 
 output "ecs_capacity_provider_name" {
-  value = module.ecs_compute.capacity_provider_name
+  value = var.ecs_capacity_provider
 }
 
 output "cloudmap_namespace" {
@@ -41,4 +41,8 @@ output "aws_region" {
 
 output "image_tag" {
   value = var.image_tag
+}
+
+output "cpu_architecture" {
+  value = var.cpu_architecture
 }

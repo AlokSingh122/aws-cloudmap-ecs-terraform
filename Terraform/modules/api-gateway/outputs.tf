@@ -1,12 +1,8 @@
 
-output "api_id" {
-  value = aws_apigatewayv2_api.main.id
-}
-
 output "api_endpoint" {
-  value = aws_apigatewayv2_api.main.api_endpoint
-}
-
-output "integration_id" {
-  value = aws_apigatewayv2_integration.cloudmap.id
+  value = format(
+    "%s%s",
+    aws_apigatewayv2_api.main.api_endpoint,
+    var.stage_name == "$default" ? "" : format("/%s", var.stage_name)
+  )
 }

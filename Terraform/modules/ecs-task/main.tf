@@ -1,19 +1,19 @@
 resource "aws_cloudwatch_log_group" "app" {
   name              = "/ecs/${var.project_name}"
-  retention_in_days = 7
+  retention_in_days = var.log_retention_days
 }
 
 resource "aws_ecs_task_definition" "app" {
   family                   = "${var.project_name}-task"
   network_mode             = "awsvpc"
-  requires_compatibilities = ["EC2"]
+  requires_compatibilities = ["FARGATE"]
   cpu                      = tostring(var.container_cpu)
   memory                   = tostring(var.container_memory)
   execution_role_arn       = var.execution_role_arn
 
   runtime_platform {
     operating_system_family = "LINUX"
-    cpu_architecture        = "X86_64"
+    cpu_architecture        = var.cpu_architecture
   }
 
   container_definitions = jsonencode([
@@ -44,11 +44,11 @@ resource "aws_ecs_task_definition" "app" {
       ]
 
       healthCheck = {
-        command     = ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:${var.container_port}/health', timeout=2).read()\" || exit 1"]
-        interval    = 30
-        timeout     = 5
-        retries     = 3
-        startPeriod = 30
+        command     = ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:${var.container_port}${var.container_health_check_path}', timeout=${var.container_health_check_timeout_seconds}).read()\" || exit 1"]
+        interval    = var.health_check_interval
+        timeout     = var.health_check_timeout
+        retries     = var.health_check_retries
+        startPeriod = var.health_check_start_period
       }
 
       logConfiguration = {
